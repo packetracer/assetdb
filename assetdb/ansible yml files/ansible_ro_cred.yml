@@ -1,0 +1,6 @@
+{
+  "ansible_connection": "network_cli",
+  "ansible_user": "<READ ONLY/READ WRITE ACCOUNT>",
+  "ansible_ssh_pass": '<PASSWORD>',
+  "ansible_network_os": "ios"
+}

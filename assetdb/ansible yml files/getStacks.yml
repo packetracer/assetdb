@@ -1,0 +1,32 @@
+---
+- hosts: STACK-SWITCHES
+
+  tasks:
+   - name: use ro creds
+     include_vars: "/ansible/creds/ansible_ro_cred.yml"
+
+   - name: get interface facts
+     register: facts_out
+     ios_facts:
+       gather_subset: hardware
+
+   - name: Create Group Subdir
+     file: path=/ansible/serial_nums/{{ group_names[0] }} state=directory
+     run_once: true
+
+   - name: Create File
+     copy:
+       content: "Device Information: \n"
+       dest:  "/ansible/serial_nums/{{ group_names[0]/{{ inventory_hostname }}.txt"
+
+   - name: Save output to /ansible/serial_nums
+     lineinfile:
+       line: " {{ item }} "
+       dest: "/ansible/serial_nums/{{ group_names[0] }}/{{ inventory_hostname }}.txt"
+       insertafter: EOF
+     with_items:
+       - "{{ facts_out['ansible_facts']['ansible_net_hostname'] }}"
+       - "{{ facts_out['ansible_facts']['ansible_net_stacked_models'] }}"
+       - "{{ facts_out['ansible_facts']['ansible_net_stacked_serialnums'] }}"
+       - "{{ facts_out['ansible_facts']['ansible_net_version'] }}"
+~
